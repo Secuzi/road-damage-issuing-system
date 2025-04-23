@@ -1,0 +1,7 @@
+post http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+###
+
+post http://localhost:3000/api/auth/signup
+Content-Type: application/json
