@@ -15,8 +15,15 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+//MongoDB Atlas connection
+import connectDB from './config/database.js'
+connectDB()
+
 import authRoute from './routes/auth.routes.js'
 app.use('/api/auth', authRoute) //http://localhost:3000/api/auth
+
+import errorHandler from './middlerwares/errorHandler.js'
+app.use(errorHandler)
 
 const port = process.env.PORT || 3000
 app.listen(port)
