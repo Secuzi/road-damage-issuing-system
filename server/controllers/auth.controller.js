@@ -4,6 +4,8 @@ import { minutesToMilliseconds, daysToMilliseconds } from "../utils/expiry.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/token.js";
 import { hashPassword, isPasswordMatch } from "../utils/hash.js";
 import User from "../models/user.model.js";
+import { generateOtp } from "../utils/generateOtp.js";
+import { sendEmail } from "../utils/mail.js";
 
 export const login = async (req, res, next) => {
   try {
@@ -98,4 +100,32 @@ export const logout = async (req, res) => {
   clearCookie(res, "refreshToken");
 
   return res.status(200).json({ message: "Logged out" });
+};
+
+export const sendVerification = async (req, res, next) => {
+  const { id } = req.user;
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return next(createError(404, "User could not be found"));
+    }
+
+    const otp = generateOtp();
+
+    user.verificationOtp = otp;
+
+    user.verificationOtpExpireAt = Date.now() + minutesToMilliseconds(1);
+    await user.save();
+
+    const output = await sendEmail(
+      user.email,
+      "Email Verification",
+      `Thank you for verifying your account. Your one-time password (OTP) is: ${otp}`,
+      next
+    );
+    return res.json(output);
+  } catch (error) {
+    return next(createError(404, error.message));
+  }
 };
