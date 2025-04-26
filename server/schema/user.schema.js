@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 // User: {_id, first name, lastname, email, password, verificationOtp,
-//     verificationOtpExpireAt, resetPasswordOtp,resetPasswordOtpExpireAt, avatar, role}
+//     verificationOtpExpireAt, resetPasswordOtp,resetPasswordOtpExpireAt, avatar, role, isAccountVerified}
 
 const userSchema = new mongoose.Schema({
     firstname: {
@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minLength: 6,
+    },
+    isAccountVerified: {
+        type: Boolean,
+        default: false,
     },
     verificationOtp: {
         type: String,
