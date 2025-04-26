@@ -54,8 +54,21 @@ export const register = async (req, res, next) => {
     }
 
     try {
-        const user = await User.findOne({email: req.body.email})
-        if (user) return next(createError(400, 'User already exists'))
+        const isUserExist = await User.findOne({email: req.body.email})
+        if (isUserExist) return next(createError(400, 'User already exists'))
+
+        const userData = {
+            ...req.body,
+            ...mockData,
+        }
+        const hashedPassword = await hashPassword(userData.password)
+        userData.password = hashedPassword
+        await User.create(userData)
+
+        const user = await User.findOne(
+            {email: userData.email},
+            {email: true, role: true}
+        )
 
         const payload = {
             id: user._id,
@@ -71,14 +84,9 @@ export const register = async (req, res, next) => {
             payload,
             process.env.REFRESH_TOKEN_SECRET
         )
-
         createCookie(res, 'accessToken', accessToken, minutesToMilliseconds(15))
         createCookie(res, 'refreshToken', refreshToken, daysToMilliseconds(7))
 
-        const hashedPassword = await hashPassword(req.body.password)
-        req.body.password = hashedPassword
-
-        await User.create({...req.body, ...mockData})
         res.status(201).json({message: 'User created successfully'})
     } catch (error) {
         next(error)
