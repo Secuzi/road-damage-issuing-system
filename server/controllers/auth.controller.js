@@ -124,7 +124,39 @@ export const sendVerification = async (req, res, next) => {
       `Thank you for verifying your account. Your one-time password (OTP) is: ${otp}`,
       next
     );
-    return res.json(output);
+    return res.status(200).json(output);
+  } catch (error) {
+    return next(createError(404, error.message));
+  }
+};
+
+export const verifyEmail = async (req, res, next) => {
+  const { otp } = req.body;
+  const { id } = req.user;
+  if (!otp) {
+    return next(createError(400, "OTP must be supplied."));
+  }
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return next(createError(404, "User could not be found"));
+    }
+
+    if (user.verificationOtp !== otp || user.verificationOtp === "") {
+      return next(createError(404, "Invalid OTP"));
+    }
+
+    if (user.verificationOtpExpireAt < Date.now()) {
+      return next(createError(404, "OTP has expired"));
+    }
+
+    user.isAccountVerified = true;
+    user.verificationOtp = "";
+    user.verificationOtpExpireAt = 0;
+    await user.save();
+
+    return res.status(200).json({ message: "Account verified" });
   } catch (error) {
     return next(createError(404, error.message));
   }
