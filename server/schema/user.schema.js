@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 // User: {_id, first name, lastname, email, password, verificationOtp,
 //     verificationOtpExpireAt, resetPasswordOtp,resetPasswordOtpExpireAt, avatar, role, isAccountVerified}
 
+const passwordMinLength = Number(process.env.PASSWORD_MIN_LENGTH)
+
 const userSchema = new mongoose.Schema({
     firstname: {
         type: String,
@@ -15,11 +17,12 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unque: true,
     },
     password: {
         type: String,
         required: true,
-        minLength: process.env.PASSWORD_MIN_LENGTH,
+        minLength: passwordMinLength,
     },
     isAccountVerified: {
         type: Boolean,
