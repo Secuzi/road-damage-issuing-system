@@ -1,5 +1,5 @@
 import createError from "http-errors";
-import { createCookie } from "../utils/cookie.js";
+import { clearCookie, createCookie } from "../utils/cookie.js";
 import { minutesToMilliseconds, daysToMilliseconds } from "../utils/expiry.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/token.js";
 import { hashPassword, isPasswordMatch } from "../utils/hash.js";
@@ -91,4 +91,11 @@ export const register = async (req, res, next) => {
     console.log(error);
     next(error);
   }
+};
+
+export const logout = async (req, res) => {
+  clearCookie(res, "accessToken");
+  clearCookie(res, "refreshToken");
+
+  return res.status(200).json({ message: "Logged out" });
 };
