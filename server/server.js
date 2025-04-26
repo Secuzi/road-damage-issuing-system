@@ -22,6 +22,7 @@ connectDB()
 import authRoute from './routes/auth.routes.js'
 app.use('/api/auth', authRoute) //http://localhost:3000/api/auth
 
+//Custom error handler
 import errorHandler from './middlerwares/errorHandler.js'
 app.use(errorHandler)
 

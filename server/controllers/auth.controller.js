@@ -54,8 +54,26 @@ export const register = async (req, res, next) => {
     }
 
     try {
-        const isUserExists = await User.findOne({email: req.body.email})
-        if (isUserExists) return next(createError(400, 'User already exists'))
+        const user = await User.findOne({email: req.body.email})
+        if (user) return next(createError(400, 'User already exists'))
+
+        const payload = {
+            id: user._id,
+            email: user.email,
+            role: user.role,
+        }
+
+        const accessToken = generateAccessToken(
+            payload,
+            process.env.ACCESS_TOKEN_SECRET
+        )
+        const refreshToken = generateRefreshToken(
+            payload,
+            process.env.REFRESH_TOKEN_SECRET
+        )
+
+        createCookie(res, 'accessToken', accessToken, minutesToMilliseconds(15))
+        createCookie(res, 'refreshToken', refreshToken, daysToMilliseconds(7))
 
         const hashedPassword = await hashPassword(req.body.password)
         req.body.password = hashedPassword
