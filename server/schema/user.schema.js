@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minLength: 6,
+        minLength: process.env.PASSWORD_MIN_LENGTH,
     },
     isAccountVerified: {
         type: Boolean,
