@@ -178,3 +178,32 @@ export const sendResetPasswordOtp = async (req, res, next) => {
 
   return res.json(output);
 };
+
+export const resetPassword = async (req, res, next) => {
+  const { email, newPassword, otp } = req.body;
+
+  if (!email || !newPassword || !otp) {
+    return next(
+      createError(400, "Email, New Password, and OTP must be required")
+    );
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(createError(400, "User not found"));
+  }
+  if (user.resetPasswordOtp !== otp || user.resetPasswordOtp === "") {
+    return next(createError(400, "Invalid OTP"));
+  }
+  if (user.resetPasswordOtpExpireAt < Date.now()) {
+    return next(createError(404, "OTP has expired"));
+  }
+
+  user.password = await hashPassword(newPassword);
+  user.resetPasswordOtp = "";
+  user.resetPasswordOtpExpireAt = 0;
+  await user.save();
+
+  return res.json({ message: "Your password has been successfully reset" });
+};
