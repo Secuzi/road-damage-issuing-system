@@ -21,10 +21,14 @@ import connectDB from './config/database.js'
 connectDB()
 
 import authRoute from './routes/auth.route.js'
+import guesRoute from './routes/guest.route.js'
 import userRoute from './routes/user.route.js'
+import adminRoute from './routes/admin.route.js'
 
+app.use('/api/guest', guesRoute) //http://localhost:3000/api/guest
 app.use('/api/auth', authRoute) //http://localhost:3000/api/auth
 app.use('/api/user', userRoute) //http://localhost:3000/api/user
+app.use('/api/admin', adminRoute) //http://localhost:3000/api/admin
 
 //Custom error handler
 import errorHandler from './middlewares/errorHandler.js'
