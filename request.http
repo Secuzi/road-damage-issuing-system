@@ -1,10 +1,5 @@
-post http://localhost:3000/api/auth/login
-Content-Type: application/json
+delete http://localhost:3000/api/users/issues/1
 
-{
-    "email": "NtBZUaq123a4@example.com",
-    "password": "   "
-}
 
 ###
 post http://localhost:3000/api/auth/register
