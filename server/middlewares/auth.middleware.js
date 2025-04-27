@@ -13,7 +13,7 @@ const userAuth = async (req, res, next) => {
     const { id, role } = verifyAccessToken(
       accessToken,
       process.env.ACCESS_TOKEN_SECRET
-    ).payload;
+    );
 
     req.user = { id, role };
     return next();
@@ -26,10 +26,11 @@ const userAuth = async (req, res, next) => {
   const { id, email, role } = verifyRefreshToken(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET
-  ).payload;
+  );
+
   const payload = { id, email, role };
   const newAccessToken = generateAccessToken(
-    { payload },
+    payload,
     process.env.ACCESS_TOKEN_SECRET
   );
   createCookie(res, "accessToken", newAccessToken, minutesToMilliseconds(15));
