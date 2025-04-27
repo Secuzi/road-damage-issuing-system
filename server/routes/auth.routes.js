@@ -10,14 +10,15 @@ import {
 } from "../controllers/auth.controller.js";
 import userAuth from "../middlewares/auth.middleware.js";
 import { sendEmail } from "../utils/mail.js";
-
+import User from "../models/user.model.js";
+import catchAsync from "../utils/catchAsync.js";
 const router = express.Router();
 
-router.post("/login", validate(loginSchema), login);
-router.post("/register", validate(registerSchema), register);
+router.post("/login", validate(loginSchema), catchAsync(login));
+router.post("/register", validate(registerSchema), catchAsync(register));
 router.get("/logout", logout);
-router.post("/send-email-otp", userAuth, sendVerification);
-router.post("/verify-email", userAuth, verifyEmail);
+router.post("/send-email-otp", userAuth, catchAsync(sendVerification));
+router.post("/verify-email", userAuth, catchAsync(verifyEmail));
 // Development routes
 router.get("/protected", userAuth, (req, res, next) => {
   return res.json({ message: req.user });
@@ -30,6 +31,19 @@ router.post("/smtp", async (req, res, next) => {
     next
   );
   return res.json(output);
+});
+router.post("/users", async (req, res) => {
+  const users = await User.find({});
+  return res.json({ users });
+});
+
+router.post("/change", async (req, res, next) => {
+  await User.findOneAndUpdate(
+    { email: "act.hvfilomeno@gmail.com" },
+    { isAccountVerified: false }
+  );
+
+  return res.json({ message: "Update successfull" });
 });
 
 export default router;
