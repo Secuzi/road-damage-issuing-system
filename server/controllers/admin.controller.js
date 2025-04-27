@@ -1,28 +1,54 @@
+import createError from 'http-errors'
+import {
+    deleteIssueById,
+    fetchIssueById,
+    fetchIssues,
+} from '../services/issue.service.js'
+import {fetchUsers, fetchUserById} from '../services/user.service.js'
+
 export const getIssues = async (req, res) => {
-    res.send('Issues')
+    const issues = await fetchIssues()
+
+    res.status(200).json(issues)
 }
 
 export const getIssue = async (req, res) => {
-    res.send('Issue')
+    const {id} = req.params
+
+    const issue = await fetchIssueById(id)
+    if (!issue) return createError(404, 'Issue not found')
+
+    res.status(200).json(issue)
 }
 
 export const updateIssue = async (req, res) => {
     const {id} = req.params
+
     res.send(`Update Issue ${id}`)
 }
 
 export const deleteIssue = async (req, res) => {
     const {id} = req.params
-    res.send(`Delete Issue ${id}`)
+
+    const result = await deleteIssueById(id)
+    if (!result) return createError(404, 'Issue not found')
+
+    res.status(200).json({message: 'Issue deleted'})
 }
 
 export const getUsers = async (req, res) => {
-    res.send('Users')
+    const users = await fetchUsers()
+
+    res.status(200).json(users)
 }
 
 export const getUser = async (req, res) => {
     const {id} = req.params
-    res.send(`User ${id}`)
+
+    const user = await fetchUserById(id)
+    if (!user) return createError(404, 'User not found')
+
+    res.status(200).json(user)
 }
 
 export const suspendUser = async (req, res) => {
