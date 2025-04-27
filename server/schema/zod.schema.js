@@ -1,42 +1,43 @@
-import { z } from "zod";
+import {z} from 'zod'
 
-const passMinLength = Number(process.env.PASSWORD_MIN_LENGTH);
-const otpLength = Number(process.env.OTP_LENGTH);
+const passMinLength = Number(process.env.PASSWORD_MIN_LENGTH)
+const otpLength = Number(process.env.OTP_LENGTH)
+
 export const loginSchema = z.object({
-  email: z.string().trim().email("Invalid email").min(1, "Email is required"),
-  password: z
-    .string()
-    .trim()
-    .min(
-      passMinLength,
-      `Password must be at least ${passMinLength} characters`
-    ),
-});
+    email: z.string().trim().email('Invalid email').min(1, 'Email is required'),
+    password: z
+        .string()
+        .trim()
+        .min(
+            passMinLength,
+            `Password must be at least ${passMinLength} characters`
+        ),
+})
 
 export const registerSchema = z.object({
-  firstname: z.string().trim().min(1, "First name is required"),
-  lastname: z.string().trim().min(1, "Last name is required"),
-  email: z.string().trim().email("Invalid email").min(1, "Email is required"),
-  password: z
-    .string()
-    .trim()
-    .min(
-      passMinLength,
-      `Password must be at least ${passMinLength} characters`
-    ),
-});
+    firstname: z.string().trim().min(1, 'First name is required'),
+    lastname: z.string().trim().min(1, 'Last name is required'),
+    email: z.string().trim().email('Invalid email').min(1, 'Email is required'),
+    password: z
+        .string()
+        .trim()
+        .min(
+            passMinLength,
+            `Password must be at least ${passMinLength} characters`
+        ),
+})
 
 export const resetPasswordSchema = z.object({
-  email: z.string().trim().email("Invalid email").min(1, "Email is required"),
-  newPassword: z
-    .string()
-    .trim()
-    .min(
-      passMinLength,
-      `Password must be at least ${passMinLength} characters`
-    ),
-  otp: z
-    .string()
-    .trim()
-    .length(otpLength, `OTP must be exactly ${otpLength} characters`),
-});
+    email: z.string().trim().email('Invalid email').min(1, 'Email is required'),
+    newPassword: z
+        .string()
+        .trim()
+        .min(
+            passMinLength,
+            `Password must be at least ${passMinLength} characters`
+        ),
+    otp: z
+        .string()
+        .trim()
+        .length(otpLength, `OTP must be exactly ${otpLength} characters`),
+})
