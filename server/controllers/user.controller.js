@@ -26,7 +26,7 @@ export const getIssue = async (req, res, next) => {
     res.status(200).send(issue)
 }
 
-export const createIssue = async (req, res) => {
+export const createIssue = async (req, res, next) => {
     res.send('createIssue')
 }
 
