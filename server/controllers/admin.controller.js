@@ -9,6 +9,7 @@ import {fetchUsers, fetchUserById} from '../services/user.service.js'
 export const getIssues = async (req, res, next) => {
     const issues = await fetchIssues()
 
+    if (issues.length === 0) return next(createError(404, 'No issues found'))
     res.status(200).json(issues)
 }
 
