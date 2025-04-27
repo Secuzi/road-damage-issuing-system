@@ -113,7 +113,7 @@ export const sendVerification = async (req, res, next) => {
 
   const output = await sendEmail(
     user.email,
-    "Email Verification",
+    "Account Verification",
     `Thank you for verifying your account. Your one-time password (OTP) is: ${otp}`,
     next
   );
@@ -146,4 +146,35 @@ export const verifyEmail = async (req, res, next) => {
   await user.save();
 
   return res.status(200).json({ message: "Account verified" });
+};
+
+export const sendResetPasswordOtp = async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return next(createError(400, "Email must not be empty"));
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return next(createError(400, "User not found"));
+  }
+
+  const otp = generateOtp();
+
+  user.resetPasswordOtp = otp;
+  user.resetPasswordOtpExpireAt = Date.now() + minutesToMilliseconds(1);
+  await user.save();
+
+  const output = await sendEmail(
+    user.email,
+    "Reset Password OTP",
+    `Thank you for requesting a password reset. Your one-time password (OTP) is: ${otp}
+
+  Please enter this code to verify your identity and set a new password. This OTP is valid for a limited time.
+  
+  If you didn't request this reset, please secure your account immediately.`
+  );
+
+  return res.json(output);
 };
