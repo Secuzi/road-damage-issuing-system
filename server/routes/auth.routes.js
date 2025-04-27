@@ -7,6 +7,7 @@ import {
   logout,
   sendVerification,
   verifyEmail,
+  sendResetPasswordOtp,
 } from "../controllers/auth.controller.js";
 import userAuth from "../middlewares/auth.middleware.js";
 import { sendEmail } from "../utils/mail.js";
@@ -19,6 +20,8 @@ router.post("/register", validate(registerSchema), catchAsync(register));
 router.get("/logout", logout);
 router.post("/send-email-otp", userAuth, catchAsync(sendVerification));
 router.post("/verify-email", userAuth, catchAsync(verifyEmail));
+router.post("/send-resetpassword-otp", catchAsync(sendResetPasswordOtp));
+
 // Development routes
 router.get("/protected", userAuth, (req, res, next) => {
   return res.json({ message: req.user });
