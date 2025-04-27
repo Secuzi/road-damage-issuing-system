@@ -4,6 +4,6 @@ import {getIssues} from '../controllers/guest.controller.js'
 
 const router = express.Router()
 
-router.get('/issue', catchAsync(getIssues))
+router.get('/issues', catchAsync(getIssues))
 
 export default router
