@@ -1,6 +1,10 @@
 import express from "express";
 import validate from "../middlewares/zodValidate.js";
-import { loginSchema, registerSchema } from "../schema/zod.schema.js";
+import {
+  loginSchema,
+  registerSchema,
+  resetPasswordSchema,
+} from "../schema/zod.schema.js";
 import {
   login,
   register,
@@ -8,6 +12,7 @@ import {
   sendVerification,
   verifyEmail,
   sendResetPasswordOtp,
+  resetPassword,
 } from "../controllers/auth.controller.js";
 import userAuth from "../middlewares/auth.middleware.js";
 import { sendEmail } from "../utils/mail.js";
@@ -21,7 +26,11 @@ router.get("/logout", logout);
 router.post("/send-email-otp", userAuth, catchAsync(sendVerification));
 router.post("/verify-email", userAuth, catchAsync(verifyEmail));
 router.post("/send-resetpassword-otp", catchAsync(sendResetPasswordOtp));
-
+router.post(
+  "/verify-resetpassword",
+  validate(resetPasswordSchema),
+  catchAsync(resetPassword)
+);
 // Development routes
 router.get("/protected", userAuth, (req, res, next) => {
   return res.json({ message: req.user });
