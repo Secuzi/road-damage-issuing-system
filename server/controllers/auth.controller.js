@@ -173,7 +173,8 @@ export const sendResetPasswordOtp = async (req, res, next) => {
 
   Please enter this code to verify your identity and set a new password. This OTP is valid for a limited time.
   
-  If you didn't request this reset, please secure your account immediately.`
+  If you didn't request this reset, please secure your account immediately.`,
+    next
   );
 
   return res.json(output);
