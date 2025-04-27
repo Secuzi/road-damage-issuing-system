@@ -3,12 +3,16 @@ import {clearCookie, createCookie} from '../utils/cookie.js'
 import {minutesToMilliseconds, daysToMilliseconds} from '../utils/expiry.js'
 import {generateAccessToken, generateRefreshToken} from '../utils/token.js'
 import {hashPassword, isPasswordMatch} from '../utils/hash.js'
-import User from '../models/user.model.js'
 import {generateOtp} from '../utils/generateOtp.js'
 import {sendEmail} from '../utils/mail.js'
+import {
+    fetchUserById,
+    fetchUserByEmail,
+    insertUser,
+} from '../services/user.service.js'
 
 export const login = async (req, res, next) => {
-    const user = await User.findOne({email: req.body.email})
+    const user = await fetchUserByEmail(req.body.email)
     if (!user) return next(createError(404, 'User not found'))
 
     const isPasswordMatched = await isPasswordMatch(
@@ -41,28 +45,19 @@ export const login = async (req, res, next) => {
 }
 
 export const register = async (req, res, next) => {
-    const mockData = {
-        verificationOtp: Math.floor(100000 + Math.random() * 900000),
-        verificationOtpExpireAt: Date.now() + 5 * 60 * 1000,
-        resetPasswordOtp: Math.floor(100000 + Math.random() * 900000),
-        resetPasswordOtpExpireAt: Date.now() + 5 * 60 * 1000,
-        avatar: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200',
-    }
+    const {email, password} = req.body
 
-    const isUserExist = await User.findOne({email: req.body.email})
+    const isUserExist = await fetchUserByEmail(email)
     if (isUserExist) return next(createError(400, 'User already exists'))
 
-    const userData = {
-        ...req.body,
-    }
-    const hashedPassword = await hashPassword(userData.password)
-    userData.password = hashedPassword
-    await User.create(userData)
+    const hashedPassword = await hashPassword(password)
+    req.body.password = hashedPassword
+    await insertUser(req.body)
 
-    const user = await User.findOne(
-        {email: userData.email},
-        {email: true, role: true}
-    )
+    const user = await fetchUserByEmail(email, {
+        email: true,
+        role: true,
+    })
 
     const payload = {
         id: user._id,
@@ -94,7 +89,7 @@ export const logout = async (req, res) => {
 export const sendVerification = async (req, res, next) => {
     const {id} = req.user
 
-    const user = await User.findById(id)
+    const user = await fetchUserById(id)
     if (!user) {
         return next(createError(404, 'User could not be found'))
     }
@@ -122,11 +117,12 @@ export const sendVerification = async (req, res, next) => {
 export const verifyEmail = async (req, res, next) => {
     const {otp} = req.body
     const {id} = req.user
+
     if (!otp) {
         return next(createError(400, 'OTP must be supplied.'))
     }
 
-    const user = await User.findById(id)
+    const user = await fetchUserById(id)
     if (!user) {
         return next(createError(404, 'User could not be found'))
     }
@@ -154,7 +150,7 @@ export const sendResetPasswordOtp = async (req, res, next) => {
         return next(createError(400, 'Email must not be empty'))
     }
 
-    const user = await User.findOne({email})
+    const user = await fetchUserByEmail(email)
     if (!user) {
         return next(createError(400, 'User not found'))
     }
@@ -170,9 +166,10 @@ export const sendResetPasswordOtp = async (req, res, next) => {
         'Reset Password OTP',
         `Thank you for requesting a password reset. Your one-time password (OTP) is: ${otp}
 
-  Please enter this code to verify your identity and set a new password. This OTP is valid for a limited time.
+        Please enter this code to verify your identity and set a new password. This OTP is valid for a limited time.
   
-  If you didn't request this reset, please secure your account immediately.`
+        If you didn't request this reset, please secure your account immediately.`,
+        next
     )
 
     return res.json(output)
@@ -187,7 +184,7 @@ export const resetPassword = async (req, res, next) => {
         )
     }
 
-    const user = await User.findOne({email})
+    const user = await fetchUserByEmail(email)
 
     if (!user) {
         return next(createError(400, 'User not found'))
