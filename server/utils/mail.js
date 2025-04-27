@@ -35,7 +35,7 @@ export const sendEmail = async (recipientEmail, subject, text, next) => {
           </head>
           <body>
             <div class="my-div">
-            <h1>HEADER NI?</h1>  
+            <h1>${subject}</h1>  
             <p>${text}</p>
             </div>
           </body>
