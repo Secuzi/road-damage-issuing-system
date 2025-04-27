@@ -24,7 +24,7 @@ import authRoute from './routes/auth.route.js'
 import userRoute from './routes/user.route.js'
 
 app.use('/api/auth', authRoute) //http://localhost:3000/api/auth
-app.use('/api/users', userRoute) //http://localhost:3000/api/user
+app.use('/api/user', userRoute) //http://localhost:3000/api/user
 
 //Custom error handler
 import errorHandler from './middlewares/errorHandler.js'
