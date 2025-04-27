@@ -1,20 +1,18 @@
 import express from 'express'
-import catchAsync from '../utils/catchAsync'
+import catchAsync from '../utils/catchAsync.js'
 import {
     getIssues,
     getIssue,
     updateIssue,
     deleteIssue,
-} from '../controllers/admin/issue.admin.js'
-import {
     getUsers,
     getUser,
     suspendUser,
-} from '../controllers/admin/user.admin.js'
+} from '../controllers/admin.controller.js'
 
 const router = express.Router()
 
-router.post('/issues', catchAsync(getIssues))
+router.get('/issues', catchAsync(getIssues))
 router
     .route('/issues/:id')
     .get(catchAsync(getIssue))
