@@ -40,6 +40,7 @@ export const login = async (req, res, next) => {
     createCookie(res, 'refreshToken', refreshToken, daysToMilliseconds(7))
 
     res.status(200).json({
+        success: true,
         message: 'Login successful',
     })
 }
@@ -76,14 +77,14 @@ export const register = async (req, res, next) => {
     createCookie(res, 'accessToken', accessToken, minutesToMilliseconds(15))
     createCookie(res, 'refreshToken', refreshToken, daysToMilliseconds(7))
 
-    res.status(201).json({message: 'User created successfully'})
+    res.status(201).json({success: true, message: 'User created successfully'})
 }
 
 export const logout = async (req, res) => {
     clearCookie(res, 'accessToken')
     clearCookie(res, 'refreshToken')
 
-    return res.status(200).json({message: 'Logged out'})
+    return res.status(200).json({success: true, message: 'Logged out'})
 }
 
 export const sendVerification = async (req, res, next) => {
@@ -140,7 +141,7 @@ export const verifyEmail = async (req, res, next) => {
     user.verificationOtpExpireAt = 0
     await user.save()
 
-    return res.status(200).json({message: 'Account verified'})
+    return res.status(200).json({success: true, message: 'Account verified'})
 }
 
 export const sendResetPasswordOtp = async (req, res, next) => {
@@ -201,5 +202,8 @@ export const resetPassword = async (req, res, next) => {
     user.resetPasswordOtpExpireAt = 0
     await user.save()
 
-    return res.json({message: 'Your password has been successfully reset'})
+    return res.json({
+        success: true,
+        message: 'Your password has been successfully reset',
+    })
 }
