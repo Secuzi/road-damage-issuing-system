@@ -1,4 +1,4 @@
-import {createBrowserRouter, Route, RouterProvider} from 'react-router-dom'
+import {RouterProvider} from 'react-router-dom'
 import router from './routes/Router.jsx'
 
 export default function App() {
