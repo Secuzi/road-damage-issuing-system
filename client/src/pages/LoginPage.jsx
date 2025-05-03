@@ -9,15 +9,19 @@ export default function LoginPage() {
     const {control, handleSubmit} = useLoginForm()
 
     return (
-        <form className="w-[350px] flex flex-col item py-4 px-8 rounded-xl shadow-md shadow-slate-400 text-font-color">
+        <form
+            className="w-[350px] flex flex-col item py-4 px-8 rounded-xl shadow-md shadow-slate-400 text-font-color"
+            onSubmit={handleSubmit((data) => console.log(data))}>
             <h2 className="my-4 text-2xl font-bold text-center">Login</h2>
             <TextField
+                control={control}
                 name="email"
                 label="Email"
                 type="email"
                 placeholder="Enter your email"
             />
             <TextField
+                control={control}
                 name="password"
                 label="Password"
                 type="password"
@@ -29,7 +33,7 @@ export default function LoginPage() {
                 Don't have an account?
                 <Link
                     to="/auth/register"
-                    className="text-accent-color underline text-accent-color">
+                    className="ml-2 underline text-accent">
                     Register
                 </Link>
             </p>
