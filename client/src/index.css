@@ -1,30 +1,4 @@
 @import 'tailwindcss';
-@plugin "daisyui";
-
-:root {
-    --font-color: #081c15;
-    --bg-color: #d8f3dc;
-    --accent-color: #52b788;
-}
-
-@layer utilities {
-    .bg-bg-color {
-        background-color: var(--bg-color);
-    }
-    .text-font-color {
-        color: var(--font-color);
-    }
-
-    .text-accent-color {
-        color: var(--accent-color);
-    }
-
-    .accent-color {
-        background-color: var(--accent-color);
-    }
-
-    .shadow-accent-color {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08),
-            0 0 10px var(--accent-color);
-    }
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark, cupcake;
 }
