@@ -10,11 +10,8 @@ import {
 export const getIssues = async (req, res, next) => {
     const issues = await fetchIssues()
 
-    if (issues.length === 0) {
-        console.log(issues.length)
-        return next(createError(404, 'Issues empty'))
-    }
-    res.status(200).send(issues)
+    if (issues.length === 0) return next(createError(404, 'Issues empty'))
+    res.status(200).json(issues)
 }
 
 export const getIssue = async (req, res, next) => {
@@ -23,7 +20,7 @@ export const getIssue = async (req, res, next) => {
     const issue = await fetchIssueById(id)
     if (!issue) return next(createError(404, 'Issue not found'))
 
-    res.status(200).send(issue)
+    res.status(200).json(issue)
 }
 
 export const createIssue = async (req, res, next) => {
