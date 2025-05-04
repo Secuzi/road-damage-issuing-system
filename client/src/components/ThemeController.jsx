@@ -1,9 +1,36 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 
 export default function ThemeController() {
+    const themes = {
+        light: 'nord',
+        dark: 'dracula',
+    }
+
+    const [currentTheme, setCurrentTheme] = useState(() => {
+        const stored = localStorage.getItem('theme')
+        return stored === themes.light ? themes.light : themes.dark
+    })
+
+    const isChecked = currentTheme === themes.light
+
+    const handleOnChange = (e) => {
+        const newTheme = e.target.checked ? themes.light : themes.dark
+        setCurrentTheme(newTheme)
+    }
+
+    useEffect(() => {
+        localStorage.setItem('theme', currentTheme)
+    }, [currentTheme])
+
     return (
         <label className="toggle text-base-content">
-            <input type="checkbox" value="nord" className="theme-controller" />
+            <input
+                type="checkbox"
+                value="nord"
+                className="theme-controller"
+                checked={isChecked}
+                onChange={handleOnChange}
+            />
 
             <svg
                 aria-label="moon"
