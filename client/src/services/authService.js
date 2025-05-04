@@ -5,4 +5,12 @@ export const login = async (userData) => {
     return data
 }
 
-export const
+export const register = async (userData) => {
+    const {data} = await axios.post('/auth/register', userData)
+    return data
+}
+
+export const logout = async () => {
+    const {data} = await axios.get('/auth/logout')
+    return data
+}
