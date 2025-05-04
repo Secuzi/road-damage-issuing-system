@@ -1,6 +1,6 @@
 import {z} from 'zod'
 
-const minLength = Number(import.meta.env.VITE_PASSWORD_MIN_LENGTH)
+const minLength = Number(import.meta.env.VITE_MIN_INPUT_LENGTH)
 
 export const loginSchema = z.object({
     email: z.string().trim().email('Invalid email').min(1, 'Email is required'),
