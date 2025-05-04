@@ -15,8 +15,13 @@ export default function AppContentContextProvider({children}) {
             console.log(error)
         }
     }
-    const handleRegister = (userData) => {
-        console.log(userData)
+    const handleRegister = async (userData) => {
+        try {
+            const data = await register(userData)
+            console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
     }
     const handleLogout = () => {
         console.log('logout')

@@ -12,6 +12,7 @@ import {
 } from '../services/user.service.js'
 
 export const login = async (req, res, next) => {
+    console.log('adad')
     const user = await fetchUserByEmail(req.body.email)
     if (!user) return next(createError(404, 'User not found'))
 
@@ -46,7 +47,8 @@ export const login = async (req, res, next) => {
 }
 
 export const register = async (req, res, next) => {
-    const {email, password} = req.body
+    console.log('heelo')
+    const {username, email, password} = req.body
 
     const isUserExist = await fetchUserByEmail(email)
     if (isUserExist) return next(createError(400, 'User already exists'))
@@ -62,6 +64,7 @@ export const register = async (req, res, next) => {
 
     const payload = {
         id: user._id,
+        username: user.username,
         email: user.email,
         role: user.role,
     }
