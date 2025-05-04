@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 //MongoDB Atlas connection
-import connectDB from './config/database.js'
+import connectDB from './configs/database.config.js'
 connectDB()
 
 import authRoute from './routes/auth.route.js'

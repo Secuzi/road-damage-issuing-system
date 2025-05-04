@@ -4,14 +4,16 @@ import Button from '../components/Button'
 import {Link} from 'react-router-dom'
 import Checkbox from '../components/Checkbox'
 import useLoginForm from '../hooks/useLoginForm'
+import {useAppContentContext} from '../utils/context'
 
 export default function LoginPage() {
     const {control, handleSubmit} = useLoginForm()
+    const {handleLogin} = useAppContentContext()
 
     return (
         <form
             className="w-[350px] flex flex-col item py-4 px-8 rounded-xl shadow-md shadow-slate-400 text-font-color"
-            onSubmit={handleSubmit((data) => console.log(data))}>
+            onSubmit={handleSubmit((data) => handleLogin(data))}>
             <h2 className="my-4 text-2xl font-bold text-center">Login</h2>
             <TextField
                 control={control}

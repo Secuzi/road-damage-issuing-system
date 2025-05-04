@@ -1,12 +1,13 @@
 import axios from '../utils/axios'
+const API_URL = import.meta.env.VITE_BACKEND_URL
 
 export const login = async (userData) => {
-    const {data} = await axios.post('/auth/login', userData)
+    const {data} = await axios.post(`${API_URL}/api/auth/login`, userData)
     return data
 }
 
 export const register = async (userData) => {
-    const {data} = await axios.post('/auth/register', userData)
+    const {data} = await axios.post(`${API_URL}/api/auth/register`, userData)
     return data
 }
 
