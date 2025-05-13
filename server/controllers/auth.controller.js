@@ -19,7 +19,7 @@ export const login = async (req, res, next) => {
     req.body.password,
     user.password
   );
-  if (!isPasswordMatched) return next(createError(400, "Invalid password"));
+  if (!isPasswordMatched) return next(createError(404, "Invalid password"));
 
   const payload = {
     id: user._id,
