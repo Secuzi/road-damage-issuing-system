@@ -1,12 +1,6 @@
+import {RouterProvider} from 'react-router-dom'
+import router from './routes/Router.jsx'
+
 export default function App() {
-  return (
-    <div>
-      <button class="btn">Button</button>
-      <input
-        type="checkbox"
-        value="light"
-        className="toggle theme-controller"
-      />
-    </div>
-  );
+    return <RouterProvider router={router}></RouterProvider>
 }
