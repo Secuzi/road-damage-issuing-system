@@ -74,9 +74,6 @@ export const register = async (req, res, next) => {
     payload,
     process.env.REFRESH_TOKEN_SECRET
   );
-  createCookie(res, "accessToken", accessToken, minutesToMilliseconds(15));
-  createCookie(res, "refreshToken", refreshToken, daysToMilliseconds(7));
-
   res.status(201).json({ success: true, message: "User created successfully" });
 };
 
