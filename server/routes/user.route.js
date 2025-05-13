@@ -18,7 +18,7 @@ const router = express.Router();
 //   .get(catchAsync(getIssue))
 //   .put(catchAsync(updateIssue))
 //   .delete(catchAsync(deleteIssue));
-router.get("/get-user", userAuth, getUsers);
+router.get("/get-user", userAuth, catchAsync(getUsers));
 router.route("/:id").get(catchAsync(getUser)).get(catchAsync(suspendUser));
 // router.route("/get-user").get(userAuth, catchAsync(getUser));
 export default router;
