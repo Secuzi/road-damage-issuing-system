@@ -22,7 +22,7 @@ const router = express.Router();
 router.post("/login", validate(loginSchema), catchAsync(login));
 router.post("/register", validate(registerSchema), catchAsync(register));
 router.get("/logout", logout);
-router.post("/send-email-otp", userAuth, catchAsync(sendVerification));
+router.get("/send-email-otp", userAuth, catchAsync(sendVerification));
 router.post("/verify-email", userAuth, catchAsync(verifyEmail));
 router.post("/send-resetpassword-otp", catchAsync(sendResetPasswordOtp));
 router.post(
@@ -31,7 +31,7 @@ router.post(
   catchAsync(resetPassword)
 );
 
-router.get("/get-auth", catchAsync(isUserAuthenticated));
+router.get("/get-auth", userAuth, catchAsync(isUserAuthenticated));
 
 // Development routes
 router.get("/protected", userAuth, (req, res, next) => {
